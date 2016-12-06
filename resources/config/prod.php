@@ -6,9 +6,18 @@ $app['api.endpoint'] = "/api";
 /**
  * SQLite database file
  */
+//$app['db.options'] = array(
+//    'driver' => 'pdo_sqlite',
+//    'path' => realpath(ROOT_PATH . '/app.db'),
+//);
+
+/**
+ * MongoDb
+ */
 $app['db.options'] = array(
-    'driver' => 'pdo_sqlite',
-    'path' => realpath(ROOT_PATH . '/app.db'),
+    'server' => 'mongodb://localhost:27017',
+    'options' => [],
+    'driverOptions' => [],
 );
 
 /**

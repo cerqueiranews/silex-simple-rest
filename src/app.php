@@ -5,6 +5,7 @@ use Silex\Provider\HttpCacheServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use App\Providers\MongoDBServiceProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +13,7 @@ use App\ServicesLoader;
 use App\RoutesLoader;
 use Carbon\Carbon;
 
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('America/Sao_Paulo');
 
 //accepting JSON
 $app->before(function (Request $request) {
@@ -26,14 +27,20 @@ $app->register(new \Euskadi31\Silex\Provider\CorsServiceProvider);
 
 $app->register(new ServiceControllerServiceProvider());
 
-$app->register(new DoctrineServiceProvider(), array(
-  "db.options" => $app["db.options"]
-));
+// using database sql with DoctrineServiceProvider
+//$app->register(new DoctrineServiceProvider(), array(
+//  "db.options" => $app["db.options"]
+//));
+
+// using database nosql with Provider developed for mongodb
+$app->register(new MongoDBServiceProvider(), [
+    'db.config' => $app["db.options"]
+]);
 
 $app->register(new HttpCacheServiceProvider(), array("http_cache.cache_dir" => ROOT_PATH . "/storage/cache",));
 
 $app->register(new MonologServiceProvider(), array(
-    "monolog.logfile" => ROOT_PATH . "/storage/logs/" . Carbon::now('Europe/London')->format("Y-m-d") . ".log",
+    "monolog.logfile" => ROOT_PATH . "/storage/logs/" . Carbon::now('America/Sao_Paulo')->format("Y-m-d") . ".log",
     "monolog.level" => $app["log.level"],
     "monolog.name" => "application"
 ));

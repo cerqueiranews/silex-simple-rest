@@ -30,15 +30,24 @@ class NotesController
     {
 
         $note = $this->getDataFromRequest($request);
-        return new JsonResponse(array("id" => $this->notesService->save($note)));
+        if(strlen($note['note']) > 0 && strlen($note['note']) <= 140){
+            return new JsonResponse(array("id" => $this->notesService->save($note)));
+        }else{
+            return new JsonResponse(array("msg" => 'LengthException: Note length must be >0 and <=140'), 400);
+        }
+
 
     }
 
     public function update($id, Request $request)
     {
         $note = $this->getDataFromRequest($request);
-        $this->notesService->update($id, $note);
-        return new JsonResponse($note);
+        if(strlen($note['note']) > 0 && strlen($note['note']) <= 140){
+            $this->notesService->update($id, $note);
+            return new JsonResponse($note);
+        }else{
+            return new JsonResponse(array("msg" => 'LengthException: Note length must be >0 and <=140'), 400);
+        }
 
     }
 
